@@ -1,0 +1,21 @@
+"""Fixes in the galaxy SDK, as (name, file, text_to_remove, replacement). Used by SDK_FAMILY/sdk_mutate.py."""
+MUTATIONS = [
+    ("cycles refused", "lattice.py", "        if len(order) != len(self.nodes):", "        if False:"),
+    ("energy flows up only", "lattice.py", 'if LEVELS.index(self.nodes[s]["level"]) > LEVELS.index(self.nodes[t]["level"]):', "if False:"),
+    ("energy is shared, not multiplied", "lattice.py", "f[s][\"total\"] * w / tot_out[s]", "f[s][\"total\"] * w"),
+    ("convergence formula", "lattice.py", "1 - math.exp(-K * v[\"incoming\"])", "1 - math.exp(-K * v[\"total\"])"),
+    ("dominators by removal", "lattice.py", "            if not self._reaches(sources, target, banned=cand):", "            if False:"),
+    ("duplicate edges refused", "lattice.py", "            if t in self.out[s]:", "            if False:"),
+    ("edge weight positive", "lattice.py", "or not math.isfinite(w) or w <= 0:", "or False:"),
+    ("self loops refused", "lattice.py", "or s == t:", "or False:"),
+    ("energy finite non-negative", "lattice.py", "or not math.isfinite(e) or e < 0:", "or False:"),
+    ("node limit", "lattice.py", "or len(nodes) > MAX_NODES:", "or False:"),
+    ("edge limit", "lattice.py", "or len(edges) > MAX_EDGES:", "or False:"),
+    ("level known", "lattice.py", 'or d.get("level") not in LEVELS:', "or False:"),
+    ("future needs the reasoning sdk", "lattice.py", "        except ImportError as exc:", "        except ZeroDivisionError as exc:"),
+    ("scene sorted for determinism", "scene.py", "for n in sorted(lat.nodes):", "for n in lat.nodes:"),
+    ("future capped", "scene.py", "list(f[\"outcomes\"].items())[:MAX_FUTURE]", "list(f[\"outcomes\"].items())"),
+    ("horizon checked", "scene.py", "if isinstance(horizon, bool) or not isinstance(horizon, (int, float)) or not 0 <= horizon <= 1:", "if False:"),
+    ("scene record kind", "scene.py", 'scene.get("kind") != "lattice_galaxy"', "False"),
+    ("black hole is the most convergent", "scene.py", "max(sorted(lat.nodes), key=lambda n: (conv[n], n))", "min(sorted(lat.nodes), key=lambda n: (conv[n], n))"),
+]

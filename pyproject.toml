@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vega-galaxy-sdk"
+version = "0.1.0"
+description = "The galaxy view of the knowledge lattice: levels, energy flow, convergence, what must happen from below and what could happen from above, as a deterministic 3D scene."
+requires-python = ">=3.10"
+dependencies = ["vega-custody-sdk", "vega-reasoning-sdk"]
+license = {file = "LICENSE"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
