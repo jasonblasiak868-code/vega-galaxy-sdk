@@ -2,6 +2,13 @@
 
 ![vega-galaxy-sdk](assets/tile.svg)
 
+<!-- vega-install-order -->
+> **Build order: 3/3. This kit needs 2 other Vega kits installed first.** Install them in this order, then this one:
+> 1/3 `vega-custody-sdk`  
+> 2/3 `vega-reasoning-sdk`  
+> 3/3 `vega-galaxy-sdk` (this kit)
+> Install each with `pip install --no-deps git+https://github.com/jasonblasiak868-code/<name>` in the order shown. Full steps: [INTEGRATION_GUIDE](https://github.com/jasonblasiak868-code/vega-umbrella-sdk/blob/main/INTEGRATION_GUIDE.md).
+
 **See what must happen and what could happen.** This kit turns a knowledge lattice into numbers and a deterministic 3D scene. From below it shows the conditions every path to a goal must pass through. From above it shows the likeliest futures, each with a confidence and an honest count of the probability it left out. It owns one concern in the Vega family: **the galaxy view of the knowledge lattice**.
 
 > **Licensing.** Source-available, not open source. Free for personal use; free for registered small businesses (under US$1M revenue and valuation); everyone else needs a commercial license (see LICENSE; for a commercial license write to jasonblasiak.ai.mail@gmail.com). Patent pending. Draft licence text, not yet reviewed by an attorney.
