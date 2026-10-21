@@ -4,7 +4,7 @@ Each row says what the capability is, why a policy or prompt-level approach cann
 
 | Capability | Why a prompt cannot provide it | Enforced in | Test | Honest limit |
 |---|---|---|---|---|
-| Necessary conditions from below | A model can list plausible prerequisites; this finds the nodes whose removal cuts every path | `Lattice.must_pass` | `tests/redteam_1_graph_and_views.py` | Slow on very large graphs |
+| Necessary conditions from below | A model can list plausible prerequisites; this finds the nodes whose removal cuts every path | `Lattice.must_pass` | `tests/redteam_1_graph_and_views.py` | Fast at the size limit (20,000 nodes, 100,000 edges) |
 | Possibilities from above with dropped mass | A model's "likely outcomes" carry no count of what was left out; this reports it | `Lattice.could_happen` | `tests/redteam_1_graph_and_views.py` | Needs the reasoning kit; confidence is not prediction |
 | Conserved flow | Prose cannot guarantee conservation; the formula shares energy and never multiplies it | `Lattice.flow` | `tests/redteam_2_math_and_scale.py` | Only as meaningful as the weights you give |
 | Convergence score | A fixed formula gives the same number every run | `Lattice.convergence` | `tests/redteam_2_math_and_scale.py` | A metaphor with a formula, not a measurement of reality |

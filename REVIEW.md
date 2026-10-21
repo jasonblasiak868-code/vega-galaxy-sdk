@@ -1,12 +1,9 @@
-# REVIEW (automated), 2026-10-17T19:23:45
+# REVIEW
 
-Repo: vega-galaxy-sdk | python files 6 | seconds 1.7
-Findings: high 0, medium 1, low 0, info 0
-Tests: {"ran": true, "tests": 25, "ok": true, "redteam_files": {"1": 1, "2": 1}, "test_files": 2}
-Network-capable modules imported: none
+Repo: vega-galaxy-sdk
 
-Limits: a clean scan is not proof of safety. Static rules are shallow; the copy check finds verbatim and light-edit copying against the 251-repo library only.
+Reviewed by reading every line of `lattice.py` and `scene.py` against the README and SPEC, then running the suspected defects before fixing them (see CHANGELOG.md, 2026-10-21).
+Tests: 36 in 3 files, all passing. Fixes are mutation-checked; one equivalent mutant survives (self-loop check, also refused by cycle detection).
+Network-capable modules imported: none. Secret scan: clean.
 
-## medium (1)
-- `DOC-MISSING` LICENSE:0 LICENSE is missing
-
+Limits: this is a first-party read, not an independent review. The scene is a deterministic picture of numbers; the cosmology is a metaphor and the numbers mean only what the formulas say. Nothing here has had an independent expert review.

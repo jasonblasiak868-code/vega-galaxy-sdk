@@ -27,13 +27,13 @@ Specified: the lattice graph model, its flow and convergence math, the two views
 
 **Public interface.** `Lattice`, `LatticeRefused`, `LEVELS`, `MAX_NODES` (20,000), `MAX_EDGES` (100,000), `K` (0.35).
 
-**Construction rules.** `nodes` is a non-empty dict of plain ids to `{level, energy}`. `edges` is a list of `(source, target, weight)` with weight a finite number above zero, between two different known nodes, never listed twice, and never running down the levels. The graph must be acyclic. Violations raise `LatticeRefused`.
+**Construction rules.** `nodes` is a non-empty dict of plain ids to `{level, energy}`. `edges` is a list of `(source, target, weight)` with weight a finite number above zero, between two different known nodes, never listed twice, and never running down the levels. The graph must be acyclic, and the node energies must add up to at most 1e300 so that no total can overflow. Violations raise `LatticeRefused`.
 
 **Behavior.**
-- `flow()`: for each node in topological order, incoming is the sum over incoming edges of the source's total times the edge weight divided by the source's total outgoing weight. Energy is shared out, never multiplied. Cached after the first call.
+- `flow()`: for each node in topological order, incoming is the sum over incoming edges of the source's total times the edge's share of the source's outgoing weight. Shares are computed from weights scaled by the source's largest outgoing weight, so very large or very small weights neither overflow nor underflow. Sums are exact and taken in a fixed order, so the same lattice gives the same numbers whatever order its edges were listed in. Energy is shared out, never multiplied. Cached after the first call.
 - `convergence()`: `round(1 - exp(-K * incoming), 6)` per node.
-- `must_pass(target)`: finds ancestors, takes the sources among them, and returns every candidate whose removal leaves no source able to reach the target. The target is included.
-- `could_happen(start, beam, depth)`: calls the reasoning kit's forecast on the out-edge weights. Raises `LatticeRefused` if the reasoning kit is not installed.
+- `must_pass(target)`: returns every node that lies on all paths from any source to the target (the dominators below a virtual root that feeds every source), target included. It is found in one pass over the ancestors in topological order using a binary-lifting nearest common ancestor, so it stays fast at the size limit (a 20,000-node chain takes well under a second; the earlier remove-and-search method took minutes).
+- `could_happen(start, beam, depth)`: calls the reasoning kit's forecast on the out-edge weights. Raises `LatticeRefused` if the reasoning kit is not installed, and also for a beam or depth the reasoning kit refuses.
 
 **Invariants.** Acyclic, upward-only, finite numbers, ids only: no content text is held.
 
@@ -41,7 +41,7 @@ Specified: the lattice graph model, its flow and convergence math, the two views
 
 **Public interface.** `build_scene`, `scene_record`, `MAX_FUTURE` (200).
 
-**Behavior.** `build_scene(lat, future_from, beam, depth, horizon)` returns a dict with the black hole id, the level list, nodes, edges and an optional future layer. Node radius is `1.0 + 1.5 * level index`, angle is a stable function of the SHA-256 of the id, height is total flow scaled to 3, brightness is convergence over the maximum. The future layer carries outcomes, the best path, entropy in bits, dropped probability mass and a note that these are possibilities, not predictions. `scene_record` returns the scene's SHA-256 over canonical JSON, counts, the black hole, horizon node count and future outcome count.
+**Behavior.** `build_scene(lat, future_from, beam, depth, horizon)` returns a dict with the black hole id, a `black_hole_active` flag (false when nothing converges), the level list, nodes, edges and an optional future layer. Node radius is `1.0 + 1.5 * level index`, angle is a stable function of the SHA-256 of the id, height is total flow scaled to 3, brightness is convergence over the maximum. The future layer carries outcomes, the best path, entropy in bits, dropped probability mass, `outcomes_total`, `outcomes_shown`, a `truncated` flag and `mass_not_shown` (the layer draws at most `MAX_FUTURE` outcomes, and the probability of the ones it did not draw is reported), and a note that these are possibilities, not predictions. `scene_record` returns the scene's SHA-256 over canonical JSON, counts, the black hole and whether it is active, horizon node count and future outcome count.
 
 ## 4. Guarantees and non-guarantees
 

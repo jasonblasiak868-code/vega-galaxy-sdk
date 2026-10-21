@@ -15,7 +15,7 @@
 | Layer | 14 of 16, deliberate |
 | Declared dependencies | vega-custody-sdk, vega-reasoning-sdk |
 | Python | 3.10 or newer, pure Python |
-| Tests | 25 tests in 2 files, all passing (STATUS.md) |
+| Tests | 36 tests in 3 files, all passing (STATUS.md) |
 | Status | Reference implementation, work in progress |
 
 **Contents:** [Why](#why-this-exists) · [Capabilities](#capabilities) · [Flow](#end-to-end-flow) · [Controls](#controls) · [Cannot do](#what-it-cannot-do) · [Platforms](#platform-support) · [Install](#install-standalone-and-unified) · [Diagnostics](#diagnostic-control) · [Fail closed](#fail-closed-and-custom-constraints) · [Family](#where-it-sits-in-the-family) · [Tests](#tests)
@@ -24,7 +24,7 @@
 
 A knowledge graph is hard to reason about by eye. People want two answers: "what has to be true before this outcome can happen?" and "where could this go next, and how sure are we?" A model asked those questions in prose can invent either answer.
 
-This kit computes them. Energy is shared out along edges and never multiplied, convergence is a fixed formula, and the necessary conditions are found by removing each ancestor in turn and checking whether the goal is still reachable. The future view is a beam search that reports the probability it threw away. The same lattice always draws the same scene, and a hash-only record lets you prove a picture belongs to that exact lattice.
+This kit computes them. Energy is shared out along edges and never multiplied, convergence is a fixed formula, and the necessary conditions are the dominators of the goal, found in a single pass. The future view is a beam search that reports the probability it threw away. The same lattice always draws the same scene, and a hash-only record lets you prove a picture belongs to that exact lattice.
 
 ## Capabilities
 
@@ -58,7 +58,7 @@ flowchart LR
 2. **Flow.** Each node's total is its own energy plus its share of every source's total, divided by that source's outgoing weight.
 3. **Converge.** Convergence rises toward 1 as incoming flow grows.
 4. **Look.** `must_pass(target)` returns the necessary conditions. `could_happen(start)` returns outcomes with probabilities.
-5. **Draw.** `build_scene` places nodes by level (radius), a stable angle from the id, and total flow (height). The node with the highest convergence is the black hole.
+5. **Draw.** `build_scene` places nodes by level (radius), a stable angle from the id, and total flow (height). The node with the highest convergence is the black hole; `black_hole_active` is false when nothing converges, so the label is not a claim.
 6. **Prove.** `scene_record` returns hashes and counts for the chain.
 
 ## Controls
@@ -111,7 +111,7 @@ Layer 14, deliberate, alongside the council kit. It reads forecasts from the rea
 
 ## Tests
 
-25 tests in 2 files, all passing (STATUS.md). Put this repo's `src` and the `src` of its dependencies on `PYTHONPATH`, then run each file in `tests/`.
+36 tests in 3 files, all passing (STATUS.md). Put this repo's `src` and the `src` of its dependencies on `PYTHONPATH`, then run each file in `tests/`.
 
 ## Status and honesty
 

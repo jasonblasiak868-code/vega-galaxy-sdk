@@ -5,7 +5,7 @@
 - lattice
 - scene
 
-Tests: 25 tests in 2 files, all passing.
+Tests: 36 tests in 3 files, all passing. Every fix in `tests/mutations.py` was checked by undoing it and confirming a test fails; one mutant survives and is equivalent (the self-loop check, which cycle detection also refuses).
 
 ## DESIGNED ONLY (not built)
 
